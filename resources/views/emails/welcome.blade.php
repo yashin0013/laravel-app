@@ -1,7 +1,7 @@
 @component('mail::message')
 # Welcome to Our Application
 
-Hi {{ $userData['title'] }},
+Hi {{ $userData['name'] }},
 
 Thank you for joining our community! We're excited to have you on board.
 
