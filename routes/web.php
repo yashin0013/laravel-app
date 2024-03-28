@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\SomeoneCheckedProfile;
 use App\Jobs\SendMailJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -16,8 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('welcome');
+});
 
-    // using dispatch function queue.
+
+Route::get('send_email', function (){
+
+ // using dispatch function queue.
 
     // dispatch(
     //     function () {
@@ -34,13 +40,26 @@ Route::get('/', function () {
     // dispatch(new SendMailJob);
 
     // Third way
-   $user= User::find(1);
- $mailData = [
-            'name' => $user->name,
-            'email' => $user->email
-        ];
-    SendMailJob::dispatch($mailData);
-       
-    dd("Email is sent successfully.");
-    // return view('welcome');
+    $user= User::find(4);
+    $mailData = [
+               'name' => $user->name,
+               'email' => $user->email
+           ];
+       SendMailJob::dispatch($mailData);
+
+       dump("Email is sent successfully.");
+
+});
+
+Route::get('events', function () {
+    $user = User::inRandomOrder()->first();
+
+    // First way to fire an event (using event handlers)
+    // event(new SomeoneCheckedProfile($user));
+
+    // Second way to fire an event (using dispatcher)
+    SomeoneCheckedProfile::dispatch($user);
+
+    dump("Email is sent successfully to " . $user->name);
+
 });
